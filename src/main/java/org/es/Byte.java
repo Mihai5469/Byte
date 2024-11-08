@@ -24,12 +24,12 @@ public class Byte {
      * @param bits stringa che representa la sequenza di bit
      */
     public Byte(String bits) {
-        this.bits = "";
-        if (!controllo(bits)){
+
+        if (!isBinary(bits) && bits.length() > 8) {
             System.err.println("La stringa non soddisfa i criteri per essere un byte");
             return;
         }
-
+        this.bits = "";
         if(bits.length() < 8){
            int n = 8 - bits.length();
            for (int i = 0; i < n; i++) {
@@ -63,18 +63,18 @@ public class Byte {
         return n;
     }
 
+
+
     /**
-     * Metodo che converte una stringa di bit in numero decimale.
-     * Se la stringa non inserito nel formato richiesto ritorna il valore '-1'
-     * @param bits stringa di bit
-     * @return n numero decimale, -1 se non e coretto
+     * Metodo che ritorna la sequenza di bit invertita
+     * @return sequenza di bit invertita (String)
      */
-    public static int decimale(String bits){
-        Byte b = new Byte(bits);
-        if(b != null){
-            return b.decimale();
+    public String inverti(){
+        String s = "";
+        for (int i = bits.length() -1; i >= 0; i--) {
+            s += bits.charAt(i);
         }
-        return -1;
+        return s;
     }
 
 
@@ -84,10 +84,10 @@ public class Byte {
      * @param bits Stringa da verificare
      * @return true se tute le condizioni sono soddisfate
      */
-    private boolean controllo(String bits) {
-        if(bits.length() > 8){
-            return false;
-        }
+    private boolean isBinary(String bits) {
+//        if(bits.length() > 8){
+//            return false;
+//        }
         for(int i = 0; i < bits.length(); i++){
             if(!(bits.charAt(i) == '1' || bits.charAt(i) == '0')){
                 return false;
@@ -95,6 +95,52 @@ public class Byte {
         }
         return true;
     }
+
+    /**
+     * Setter
+     * @param bits insieme di bit
+     */
+    public void setBits(String bits) {
+        if (!isBinary(bits)){
+            System.err.println("La stringa non soddisfa i criteri per essere un byte");
+            return;
+        }
+        this.bits = bits;
+    }
+
+    /**
+     * Getter
+     * @return bits insieme di bit
+     */
+    public String getBits() {
+        return bits;
+    }
+
+    /**
+     * Metodo che ritorna la cifra piu significativa nell'insieme di bit
+     * @return n Cifra piu significativa
+     */
+    public int cifraPS(){
+        int n = 0;
+        boolean v = true;
+        for (int i = 0; i < bits.length() && v; i++) {
+            if(bits.charAt(i) == '1'){
+                n = 7 - i;
+                v = false;
+            }
+        }
+        return n;
+    }
+
+
+    /**
+     * Metodo che ritorna la cifra Meno significativa nell'insieme di bit
+     * @return 0 e sempre la meno significativa
+     */
+    public int cifraMS(){
+        return 0;
+    }
+
 
     @Override
     public String toString() {
